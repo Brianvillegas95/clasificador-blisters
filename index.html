@@ -9,19 +9,25 @@
             font-family: sans-serif;
             text-align: center;
             margin-top: 30px;
-            background-color: lightblue; /* Fondo azul claro */
+            background-color: #4169E1; /* Azul Rey */
         }
 
         h1 {
-            color: white; /* Letras blancas para el título */
-            font-size: 2em; /* Tamaño de letra grande */
+            color: white;
+            font-size: 2em;
+        }
+
+        h2 { /* Estilo para el título secundario */
+            color: white;
+            font-size: 1.5em;
+            margin-top: 10px;
         }
 
         img.logo {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            max-width: 100px; /* Ajusta el tamaño del logo según sea necesario */
+            top: 30px;
+            left: 30px;
+            max-width: 100px;
         }
 
         video {
@@ -47,7 +53,7 @@
 <body>
     <img src="Logo azor.png" alt="Logo Grupo Azor" class="logo">
     <h1>CONTROL DE CALIDAD GRUPO AZOR MEXICO</h1>
-    <div id="webcam-container"></div>
+    <h2>Detector de Blister</h2>  <div id="webcam-container"></div>
     <div class="label-container" id="label-container">Cargando modelo...</div>
     <div class="error-message" id="error-container"></div>
 
