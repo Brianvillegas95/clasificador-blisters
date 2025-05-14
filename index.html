@@ -14,13 +14,6 @@
         video {
             width: 300px;
             border-radius: 10px;
-            display: none;
-        }
-
-        #selected-image {
-            max-width: 300px;
-            border-radius: 10px;
-            display: none;
         }
 
         .label-container {
@@ -34,28 +27,13 @@
             font-size: 18px;
             margin-top: 10px;
         }
-
-        #input-container {
-            margin-bottom: 20px;
-        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 </head>
 
 <body>
     <h1>Clasificador de Blisters</h1>
-
-    <div id="input-container">
-        <button id="webcam-button">Usar Webcam</button>
-        <input type="file" id="image-upload" accept="image/*">
-    </div>
-
-    <div id="webcam-container">
-        <video id="webcam" autoplay playsinline></video>
-        <canvas id="webcam-canvas" style="display: none;"></canvas>
-        <img id="selected-image" src="" alt="Imagen Seleccionada">
-    </div>
-
+    <div id="webcam-container"></div>
     <div class="label-container" id="label-container">Cargando modelo...</div>
     <div class="error-message" id="error-container"></div>
 
@@ -64,11 +42,6 @@
         const URL = "./";
         let model, webcam, labelContainer, maxPredictions;
         const errorContainer = document.getElementById('error-container');
-        const webcamElement = document.getElementById('webcam');
-        const webcamCanvas = document.getElementById('webcam-canvas');
-        const webcamButton = document.getElementById('webcam-button');
-        const imageUpload = document.getElementById('image-upload');
-        const selectedImage = document.getElementById('selected-image');
 
         async function init() {
             const modelURL = URL + "model.json";
@@ -78,15 +51,14 @@
                 model = await tmImage.load(modelURL, metadataURL);
                 maxPredictions = model.getTotalClasses();
 
-                webcam = new tmImage.Webcam(300, 300, true, webcamElement, webcamCanvas);
+                const flip = true;
+                webcam = new tmImage.Webcam(300, 300, flip);
                 await webcam.setup();
+                await webcam.play();
+                window.requestAnimationFrame(loop);
 
-                webcamButton.onclick = async () => {
-                    webcamElement.style.display = 'block';
-                    selectedImage.style.display = 'none';
-                    await webcam.play();
-                    loop();
-                };
+                document.getElementById("webcam-container").appendChild(webcam.canvas);
+                labelContainer = document.getElementById("label-container");
 
             } catch (error) {
                 console.error("Error al cargar el modelo:", error);
@@ -99,43 +71,21 @@
         }
 
         async function loop() {
-            if (webcam && webcam.webcam.readyState === 4) {
-                webcam.update();
-                await predict();
-                window.requestAnimationFrame(loop);
-            }
+            webcam.update();
+            await predict();
+            window.requestAnimationFrame(loop);
         }
 
         async function predict() {
             try {
-                let image = webcamElement;
-                if (selectedImage.style.display === 'block') {
-                    image = selectedImage;
-                }
-
-                const prediction = await model.predict(image);
+                const prediction = await model.predict(webcam.canvas);
                 let result = prediction[0].probability > prediction[1].probability ? prediction[0] : prediction[1];
                 labelContainer.innerHTML = `Resultado: <span style="color: ${result.className.includes('vacío') ? 'red' : 'green'}">${result.className.toUpperCase()}</span>`;
-
             } catch (error) {
                 console.error("Error al hacer la predicción:", error);
                 errorContainer.innerText = "Error al hacer la predicción.";
             }
         }
-
-        imageUpload.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    selectedImage.src = e.target.result;
-                    selectedImage.style.display = 'block';
-                    webcamElement.style.display = 'none';
-                    predict();
-                }
-                reader.readAsDataURL(file);
-            }
-        });
 
         document.addEventListener('DOMContentLoaded', function() {
             init();
@@ -143,4 +93,5 @@
     </script>
 </body>
 
+</html>
 </html>
