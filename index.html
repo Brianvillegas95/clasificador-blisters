@@ -40,13 +40,14 @@
     <script type="text/javascript">
         const URL = "./"; // Ruta relativa (funciona en GitHub Pages)
         let model, webcam, labelContainer, maxPredictions;
-        const errorContainer = document.getElementById('error-container'); // Para mostrar errores
+        const errorContainer = document.getElementById('error-container');
 
         async function init() {
             const modelURL = URL + "model.json";
             const metadataURL = URL + "metadata.json";
 
             try {
+                // Intenta cargar el modelo
                 model = await tmImage.load(modelURL, metadataURL);
                 maxPredictions = model.getTotalClasses();
 
@@ -58,13 +59,15 @@
 
                 document.getElementById("webcam-container").appendChild(webcam.canvas);
                 labelContainer = document.getElementById("label-container");
-            } catch (e) {
+
+            } catch (error) {
+                // Captura cualquier error durante la carga
+                console.error("Error al cargar el modelo:", error);
                 let errorMessage = "Error al cargar el modelo. Asegúrate de que 'model.json' y 'metadata.json' estén en la misma carpeta.";
-                if (e && e.message) {
-                    errorMessage += " Detalles: " + e.message;
+                if (error && error.message) {
+                    errorMessage += " Detalles: " + error.message;
                 }
                 errorContainer.innerText = errorMessage;
-                console.error(e);
             }
         }
 
@@ -79,13 +82,9 @@
                 const prediction = await model.predict(webcam.canvas);
                 let result = prediction[0].probability > prediction[1].probability ? prediction[0] : prediction[1];
                 labelContainer.innerHTML = `Resultado: <span style="color: ${result.className.includes('vacío') ? 'red' : 'green'}">${result.className.toUpperCase()}</span>`;
-            } catch (e) {
-                let errorMessage = "Error al realizar la predicción.";
-                if (e && e.message) {
-                    errorMessage += " Detalles: " + e.message;
-                }
-                errorContainer.innerText = errorMessage;
-                console.error(e);
+            } catch (error) {
+                console.error("Error al hacer la predicción:", error);
+                errorContainer.innerText = "Error al hacer la predicción.";
             }
         }
 
