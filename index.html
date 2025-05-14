@@ -9,6 +9,19 @@
             font-family: sans-serif;
             text-align: center;
             margin-top: 30px;
+            background-color: lightblue; /* Fondo azul claro */
+        }
+
+        h1 {
+            color: white; /* Letras blancas para el título */
+            font-size: 2em; /* Tamaño de letra grande */
+        }
+
+        img.logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            max-width: 100px; /* Ajusta el tamaño del logo según sea necesario */
         }
 
         video {
@@ -32,7 +45,8 @@
 </head>
 
 <body>
-    <h1>Clasificador de Blisters</h1>
+    <img src="cropped-logo-azor-azul-(1).png" alt="Logo Grupo Azor" class="logo">
+    <h1>CONTROL DE CALIDAD GRUPO AZOR MEXICO</h1>
     <div id="webcam-container"></div>
     <div class="label-container" id="label-container">Cargando modelo...</div>
     <div class="error-message" id="error-container"></div>
@@ -62,7 +76,7 @@
 
             } catch (error) {
                 console.error("Error al cargar el modelo:", error);
-                let errorMessage = "Error al cargar el modelo. Asegúrate de que 'model.json', 'metadata.json' y 'weights.bin' estén en la misma carpeta.";
+                let errorMessage = "Error al cargar el modelo. Asegúrate de que los archivos del modelo estén en la misma carpeta.";
                 if (error && error.message) {
                     errorMessage += " Detalles: " + error.message;
                 }
@@ -80,14 +94,16 @@
             try {
                 const prediction = await model.predict(webcam.canvas);
                 let result = prediction[0].probability > prediction[1].probability ? prediction[0] : prediction[1];
-                labelContainer.innerHTML = `Resultado: <span style="color: ${result.className.includes('Blister Vacio') ? 'red' : 'green'}">${result.className.toUpperCase()}</span>`;
+                labelContainer.innerHTML = `Resultado: <span style="color: ${result.className.includes('vacío') ? 'red' : 'green'}">${result.className.toUpperCase()}</span>`;
             } catch (error) {
                 console.error("Error al hacer la predicción:", error);
                 errorContainer.innerText = "Error al hacer la predicción.";
             }
         }
 
-        init();
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+        });
     </script>
 </body>
 
