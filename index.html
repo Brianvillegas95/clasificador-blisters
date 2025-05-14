@@ -14,13 +14,13 @@
         video {
             width: 300px;
             border-radius: 10px;
-            display: none; /* Ocultar inicialmente la webcam */
+            display: none;
         }
 
         #selected-image {
             max-width: 300px;
             border-radius: 10px;
-            display: none; /* Ocultar inicialmente la imagen subida */
+            display: none;
         }
 
         .label-container {
@@ -131,13 +131,15 @@
                     selectedImage.src = e.target.result;
                     selectedImage.style.display = 'block';
                     webcamElement.style.display = 'none';
-                    predict(); // Llama a predict() directamente después de cargar la imagen
+                    predict();
                 }
                 reader.readAsDataURL(file);
             }
         });
 
-        init();
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+        });
     </script>
 </body>
 
