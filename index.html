@@ -28,6 +28,7 @@
             margin-top: 10px;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 </head>
 
 <body>
@@ -47,7 +48,6 @@
             const metadataURL = URL + "metadata.json";
 
             try {
-                // Intenta cargar el modelo
                 model = await tmImage.load(modelURL, metadataURL);
                 maxPredictions = model.getTotalClasses();
 
@@ -61,7 +61,6 @@
                 labelContainer = document.getElementById("label-container");
 
             } catch (error) {
-                // Captura cualquier error durante la carga
                 console.error("Error al cargar el modelo:", error);
                 let errorMessage = "Error al cargar el modelo. Asegúrate de que 'model.json' y 'metadata.json' estén en la misma carpeta.";
                 if (error && error.message) {
