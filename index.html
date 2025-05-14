@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Clasificador de Blisters</title>
+    <title>Detector de Blister - Grupo Azor</title>
     <style>
         body {
             font-family: sans-serif;
@@ -39,7 +39,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
     <script type="text/javascript">
-        const URL = "./";
+        const URL = "./"; // Ruta relativa (funciona en GitHub Pages)
         let model, webcam, labelContainer, maxPredictions;
         const errorContainer = document.getElementById('error-container');
 
@@ -62,7 +62,7 @@
 
             } catch (error) {
                 console.error("Error al cargar el modelo:", error);
-                let errorMessage = "Error al cargar el modelo. Asegúrate de que los archivos del modelo estén en la misma carpeta.";
+                let errorMessage = "Error al cargar el modelo. Asegúrate de que 'model.json', 'metadata.json' y 'weights.bin' estén en la misma carpeta.";
                 if (error && error.message) {
                     errorMessage += " Detalles: " + error.message;
                 }
@@ -87,11 +87,8 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            init();
-        });
+        init();
     </script>
 </body>
 
-</html>
 </html>
