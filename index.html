@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detector de Blister - Grupo Azor</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        video {
+            width: 300px;
+            border-radius: 10px;
+        }
+
+        .label-container {
+            font-size: 24px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Clasificador de Blisters</h1>
+    <div id="webcam-container"></div>
+    <div class="label-container" id="label-container">Cargando modelo...</div>
+    <div class="error-message" id="error-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+    <script type="text/javascript">
+        const URL = "./"; // Ruta relativa (funciona en GitHub Pages)
+        let model, webcam, labelContainer, maxPredictions;
+        const errorContainer = document.getElementById('error-container'); // Para mostrar errores
+
+        async function init() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+
+            try {
+                model = await tmImage.load(modelURL, metadataURL);
+                maxPredictions = model.getTotalClasses();
+
+                const flip = true;
+                webcam = new tmImage.Webcam(300, 300, flip);
+                await webcam.setup();
+                await webcam.play();
+                window.requestAnimationFrame(loop);
+
+                document.getElementById("webcam-container").appendChild(webcam.canvas);
+                labelContainer = document.getElementById("label-container");
+            } catch (e) {
+                let errorMessage = "Error al cargar el modelo. Asegúrate de que 'model.json' y 'metadata.json' estén en la misma carpeta.";
+                if (e && e.message) {
+                    errorMessage += " Detalles: " + e.message;
+                }
+                errorContainer.innerText = errorMessage;
+                console.error(e);
+            }
+        }
+
+        async function loop() {
+            webcam.update();
+            await predict();
+            window.requestAnimationFrame(loop);
+        }
+
+        async function predict() {
+            try {
+                const prediction = await model.predict(webcam.canvas);
+                let result = prediction[0].probability > prediction[1].probability ? prediction[0] : prediction[1];
+                labelContainer.innerHTML = `Resultado: <span style="color: ${result.className.includes('vacío') ? 'red' : 'green'}">${result.className.toUpperCase()}</span>`;
+            } catch (e) {
+                let errorMessage = "Error al realizar la predicción.";
+                if (e && e.message) {
+                    errorMessage += " Detalles: " + e.message;
+                }
+                errorContainer.innerText = errorMessage;
+                console.error(e);
+            }
+        }
+
+        init();
+    </script>
+</body>
+
+</html>
