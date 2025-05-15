@@ -57,6 +57,29 @@
             cursor: pointer;
             margin-top: 20px;
         }
+
+        .pause-button {
+            background-color: #FFFF00; /* Amarillo */
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .resume-button {
+            background-color: #00FF00; /* Verde */
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: none; /* Ocultar inicialmente */
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 </head>
@@ -70,15 +93,17 @@
     <div class="error-message" id="error-container"></div>
 
     <button class="inicio-button" onclick="window.location.href='https://web.azor.com.mx/';">INICIO</button>
-
-    <audio id="alarma-audio" src="./Alerta.mp3"></audio>
+    <button id="pause-button" class="pause-button">Pausar Cámara</button>
+    <button id="resume-button" class="resume-button">Reanudar Cámara</button>
 
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
     <script type="text/javascript">
-        const URL = "./"; // Ruta relativa (funciona en GitHub Pages)
+        const URL = "./";
         let model, webcam, labelContainer, maxPredictions;
         const errorContainer = document.getElementById('error-container');
-        const alarmaAudio = document.getElementById('alarma-audio');
+        let webcamActive = true;
+        const pauseButton = document.getElementById('pause-button');
+        const resumeButton = document.getElementById('resume-button');
 
         async function init() {
             const modelURL = URL + "model.json";
@@ -97,6 +122,9 @@
                 document.getElementById("webcam-container").appendChild(webcam.canvas);
                 labelContainer = document.getElementById("label-container");
 
+                pauseButton.addEventListener('click', pauseWebcam);
+                resumeButton.addEventListener('click', resumeWebcam);
+
             } catch (error) {
                 console.error("Error al cargar el modelo:", error);
                 let errorMessage = "Error al cargar el modelo. Asegúrate de que los archivos del modelo estén en la misma carpeta.";
@@ -108,26 +136,38 @@
         }
 
         async function loop() {
-            webcam.update();
-            await predict();
-            window.requestAnimationFrame(loop);
+            if (webcamActive) {
+                webcam.update();
+                await predict();
+                window.requestAnimationFrame(loop);
+            } else {
+                window.requestAnimationFrame(loop);
+            }
         }
 
         async function predict() {
             try {
                 const prediction = await model.predict(webcam.canvas);
                 let result = prediction[0].probability > prediction[1].probability ? prediction[0] : prediction[1];
-                labelContainer.innerHTML = `Resultado: <span style="color: ${result.className.includes('Blister Vacio') ? 'red' : 'green'}">${result.className.toUpperCase()}</span>`;
-
-                // Reproducir el sonido solo si la clase es "Blister Vacio" (exactamente)
-                if (result.className.toUpperCase() === 'BLISTER VACIO') {
-                    alarmaAudio.play();
-                }
-
+                labelContainer.innerHTML = `Resultado: <span style="color: ${result.className.includes('BLISTER CORRECTO') ? 'green' : 'red'}">${result.className.toUpperCase()}</span>`;
             } catch (error) {
                 console.error("Error al hacer la predicción:", error);
                 errorContainer.innerText = "Error al hacer la predicción.";
             }
+        }
+
+        function pauseWebcam() {
+            webcam.pause();
+            webcamActive = false;
+            pauseButton.style.display = 'none';
+            resumeButton.style.display = 'inline-block';
+        }
+
+        function resumeWebcam() {
+            webcam.play();
+            webcamActive = true;
+            resumeButton.style.display = 'none';
+            pauseButton.style.display = 'inline-block';
         }
 
         document.addEventListener('DOMContentLoaded', function() {
