@@ -17,7 +17,7 @@
             font-size: 2em;
         }
 
-        h2 { /* Estilo para el título secundario */
+        h2 {
             color: black;
             font-size: 1.5em;
             margin-top: 10px;
@@ -46,6 +46,17 @@
             font-size: 18px;
             margin-top: 10px;
         }
+
+        .inicio-button {
+            background-color: blue;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 </head>
@@ -53,9 +64,12 @@
 <body>
     <img src="Logo azor.png" alt="Logo Grupo Azor" class="logo">
     <h1>CONTROL DE CALIDAD GRUPO AZOR MEXICO</h1>
-    <h2>Detector de Blister</h2>  <div id="webcam-container"></div>
+    <h2>Detector de Blister</h2>
+    <div id="webcam-container"></div>
     <div class="label-container" id="label-container">Cargando modelo...</div>
     <div class="error-message" id="error-container"></div>
+
+    <button class="inicio-button" onclick="window.location.href='https://web.azor.com.mx/';">INICIO</button>
 
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
     <script type="text/javascript">
@@ -100,7 +114,7 @@
             try {
                 const prediction = await model.predict(webcam.canvas);
                 let result = prediction[0].probability > prediction[1].probability ? prediction[0] : prediction[1];
-                labelContainer.innerHTML = `Resultado: <span style="color: ${result.className.includes('Blister Vacio') ? 'red' : 'green'}">${result.className.toUpperCase()}</span>`;
+                labelContainer.innerHTML = `Resultado: <span style="color: ${result.className.includes('vacío') ? 'red' : 'green'}">${result.className.toUpperCase()}</span>`;
             } catch (error) {
                 console.error("Error al hacer la predicción:", error);
                 errorContainer.innerText = "Error al hacer la predicción.";
