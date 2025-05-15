@@ -24,17 +24,22 @@
         }
 
         .header {
-            background-color: #007bff;
-            color: white;
-            padding: 20px;
-            text-align: center;
+            background-color: white; /* Fondo blanco para el header */
+            color: #333; /* Color de texto más oscuro */
+            padding: 10px 20px;
+            text-align: left; /* Alinear el texto a la izquierda */
             display: flex;
-            justify-content: space-between;
             align-items: center;
         }
 
         .logo {
-            max-height: 50px;
+            max-height: 40px;
+            margin-right: 15px;
+        }
+
+        .header h1 {
+            font-size: 1.5em;
+            margin: 0;
         }
 
         .main-content {
@@ -138,14 +143,14 @@
         }
 
         #pause-button {
-            background-color: #ffc107; /* Amarillo */
+            background-color: #ffc107;
             color: black;
         }
 
         #resume-button {
-            background-color: #4caf50; /* Verde */
+            background-color: #4caf50;
             color: white;
-            display: none; /* Ocultar inicialmente */
+            display: none;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -161,7 +166,7 @@
 
         <div class="main-content">
             <div class="left-panel">
-                <h2>Inspección Visual</h2>
+                <h2>Clasificador de Blister</h2>
                 <div id="webcam-container"></div>
                 <div id="progress-bar-container">
                     <div id="progress-bar"></div>
