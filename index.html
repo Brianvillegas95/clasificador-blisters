@@ -18,8 +18,8 @@
         }
 
         .container {
-            width: 90%;
-            max-width: 1400px;
+            width: 95%;
+            max-width: 1200px;
             margin: 20px auto;
             background-color: white;
             border-radius: 12px;
@@ -35,7 +35,7 @@
         .header {
             background-color: #007bff;
             color: white;
-            padding: 16px;
+            padding: 10px 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -48,7 +48,7 @@
         }
 
         .logo {
-            max-height: 60px;
+            max-height: 50px;
             margin-right: 10px;
             opacity: 0.9;
             transition: opacity 0.3s ease-in-out;
@@ -59,7 +59,7 @@
         }
 
         .header h1 {
-            font-size: 2rem;
+            font-size: 1.8em;
             font-weight: 700;
             margin: 0;
             letter-spacing: 0.5px;
@@ -68,8 +68,12 @@
         .main-content {
             padding: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 15px;
+        }
+
+        .left-panel {
+            width: 100%;
         }
 
         .left-panel h2 {
@@ -78,44 +82,52 @@
             padding-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            margin-top: 0; /* Añadido */
+            margin-bottom: 10px; /* Añadido */
         }
 
         .right-panel {
-            background-color: #f9f9f9;
+            width: 100%;
+            background-color: #f5f5f5;
             border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 8px;
+            padding: 15px;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            align-items: stretch;
         }
 
         .right-panel h3 {
             font-size: 1.25rem;
             margin-bottom: 10px;
+            margin-top: 0; /* Añadido */
         }
 
-        .right-panel ol { /* Cambiado a ol */
+        .right-panel ol {
             font-size: 1rem;
             line-height: 1.5;
             margin-bottom: 12px;
-            padding-left: 20px; /* Añadido relleno para alinear la lista */
+            padding-left: 20px;
         }
 
         #webcam-container {
             width: 100%;
-            max-width: 450px;
+            max-width: 400px;
             margin: 0 auto 15px;
-            border-radius: 12px;
+            border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
+            aspect-ratio: 4 / 3; /* Proporción de la cámara */
         }
 
         video {
             display: block;
             width: 100%;
+            height: 100%; /* Ajustar la altura al contenedor */
+            object-fit: cover; /* Evitar distorsión */
         }
 
         .label-container {
@@ -129,6 +141,7 @@
             color: red;
             font-size: 0.9rem;
             margin-top: 8px;
+            animation: shake 0.5s;
         }
 
         .controls {
