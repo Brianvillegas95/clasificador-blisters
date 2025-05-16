@@ -7,39 +7,41 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
     <style>
+        /* Estilos Globales */
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Montserrat', sans-serif; /* Fuente moderna y elegante */
             margin: 0;
             padding: 0;
             background-color: #f0f0f0;
             color: #333;
-            -webkit-font-smoothing: antialiased;
+            -webkit-font-smoothing: antialiased; /* Suavizar las fuentes */
             -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
-            width: 95%;
-            max-width: 1400px;
-            margin: 20px auto;
+            width: 90%;
+            max-width: 1400px; /* Aumentar el ancho máximo */
+            margin: 30px auto; /* Aumentar el margen */
             background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            border-radius: 16px; /* Aumentar el radio del borde */
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.2); /* Sombra más fuerte */
             overflow: hidden;
-            transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out; /* Transición suave */
         }
 
         .container:hover {
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.25); /* Sombra aún más fuerte al pasar el ratón */
         }
 
+        /* Encabezado */
         .header {
             background-color: #007bff;
             color: white;
-            padding: 10px 15px;
+            padding: 20px 30px; /* Más padding horizontal */
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            border-bottom: 3px solid #0056b3;
+            align-items: center;
+            border-bottom: 2px solid #0056b3; /* Borde inferior más oscuro */
         }
 
         .logo-container {
@@ -48,8 +50,8 @@
         }
 
         .logo {
-            max-height: 50px;
-            margin-right: 10px;
+            max-height: 70px; /* Aumentar la altura del logo */
+            margin-right: 25px; /* Más margen derecho */
             opacity: 0.9;
             transition: opacity 0.3s ease-in-out;
         }
@@ -59,18 +61,19 @@
         }
 
         .header h1 {
-            font-size: 1.8em;
-            font-weight: 700;
+            font-size: 2.2em; /* Aumentar tamaño del título */
             margin: 0;
-            letter-spacing: 0.5px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Sombra de texto */
         }
 
+        /* Contenido Principal */
         .main-content {
-            padding: 20px;
+            padding: 30px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto 1fr; /* Añadido para controlar el tamaño vertical */
-            grid-gap: 15px;
+            grid-template-columns: 60% 40%; /* Proporciones de las columnas */
+            grid-gap: 30px;
         }
 
         .left-panel {
@@ -78,93 +81,106 @@
         }
 
         .left-panel h2 {
-            font-size: 1.5rem;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
             margin-top: 0;
-            margin-bottom: 10px;
+            font-size: 2.0em;
+            color: #555;
+            border-bottom: 3px solid #ddd;
+            padding-bottom: 15px;
+            text-transform: uppercase; /* Mayúsculas */
+            letter-spacing: 1px;
         }
 
         .right-panel {
-            background-color: #f5f5f5;
+            width: 100%;
+            background-color: #f9f9f9;
             border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 25px;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
-            justify-content: flex-start; /* Cambio aquí */
-            align-items: stretch;
+            justify-content: space-between; /* Alineación vertical */
+            align-items: stretch; /* Estirar elementos */
         }
 
         .right-panel h3 {
-            font-size: 1.5rem; /* Aumentado el tamaño del título */
-            margin-bottom: 10px;
+            font-size: 1.6em;
+            color: #555;
             margin-top: 0;
+            margin-bottom: 15px;
         }
 
-        .right-panel ol {
-            font-size: 1.15rem; /* Aumentado el tamaño de la lista */
-            line-height: 1.6; /* Aumentado el espaciado entre líneas */
-            margin-bottom: 12px;
-            padding-left: 20px;
-            margin-top: 0; /* Añadido para alinear arriba */
+        .right-panel p {
+            font-size: 1.15em;
+            line-height: 1.7;
+            color: #666;
         }
 
+        /* Cámara y Resultados */
         #webcam-container {
             width: 100%;
-            max-width: 450px;
-            margin: 0 auto 15px;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            border: 2px solid #007bff;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
-            aspect-ratio: 4 / 3;
-            display: flex; /* Flexbox */
-            justify-content: center; /* Centrar horizontalmente */
-            align-items: center; /* Centrar verticalmente */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        #webcam-container:hover {
+            border-color: #0056b3;
         }
 
         video {
             display: block;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
         }
 
         .label-container {
-            font-size: 1.25rem;
+            font-size: 24px;
             font-weight: bold;
+            margin-bottom: 15px;
             color: #007bff;
-            margin-top: 10px;
+            animation: fadeIn 0.5s ease-in-out; /* Animación de entrada */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .error-message {
             color: red;
-            font-size: 0.9rem;
-            margin-top: 8px;
-            animation: shake 0.5s;
+            font-size: 16px;
+            margin-top: 15px;
+            animation: shake 0.5s; /* Animación de error */
         }
 
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        /* Controles */
         .controls {
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
             justify-content: center;
-            margin-top: 20px;
+            gap: 25px;
+            margin-top: 30px;
         }
 
         .button {
-            padding: 10px 20px;
-            font-size: 1rem;
+            padding: 15px 30px;
             border: none;
-            border-radius: 12px;
-            font-weight: 600;
+            border-radius: 10px;
+            font-size: 18px;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.25s ease-in-out;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            font-weight: 600; /* Semi-negrita */
         }
 
         .primary {
@@ -174,7 +190,7 @@
 
         .primary:hover {
             background-color: #0056b3;
-            transform: translateY(-2px);
+            transform: translateY(-2px); /* Elevar ligeramente */
         }
 
         .secondary {
@@ -189,7 +205,7 @@
 
         .warning {
             background-color: #ffc107;
-            color: black;
+            color: #212529; /* Casi negro */
         }
 
         .warning:hover {
@@ -197,33 +213,94 @@
             transform: translateY(-2px);
         }
 
+        /* Barra de Progreso */
         #progress-bar-container {
             width: 100%;
-            height: 10px;
-            background-color: #eee;
-            border-radius: 6px;
+            height: 14px;
+            background-color: #f3f3f3;
+            margin-bottom: 20px;
+            border-radius: 8px;
             overflow: hidden;
-            margin: 10px 0;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         #progress-bar {
             height: 100%;
-            width: 0;
-            background-color: #28a745;
+            width: 0%;
+            background-color: #4caf50;
             transition: width 0.4s ease-in-out;
         }
 
+        /* Botones Pausar/Reanudar */
+        #pause-button, #resume-button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #pause-button {
+            background-color: #ffc107; /* Amarillo */
+            color: black;
+        }
+
+        #pause-button:hover {
+            background-color: #e0a800;
+        }
+
+        #resume-button {
+            background-color: #4caf50; /* Verde */
+            color: white;
+            display: none; /* Ocultar inicialmente */
+        }
+
+        #resume-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Pie de Página */
         .footer {
             background-color: #343a40;
             color: white;
             text-align: center;
-            padding: 12px;
-            font-size: 0.875rem;
+            padding: 15px;
+            font-size: 0.9em;
             border-top: 1px solid #555;
-            border-bottom-left-radius: 12px;
-            border-bottom-right-radius: 12px;
+            margin-top: 30px; /* Espacio superior */
+            border-bottom-left-radius: 16px; /* Redondear esquinas inferiores */
+            border-bottom-right-radius: 16px;
         }
+
+        /* Estilos para el personaje */
+        #auditor-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            max-width: 150px; /* Ajusta el tamaño según sea necesario */
+            z-index: 10; /* Asegura que esté por encima de otros elementos */
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+            cursor: pointer; /* Cambiar el cursor al pasar el ratón */
+        }
+
+        #auditor-container:hover {
+            transform: scale(1.05); /* Ligeramente más grande al pasar el ratón */
+        }
+
+        #auditor-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 </head>
 
 <body>
@@ -231,9 +308,9 @@
         <header class="header">
             <div class="logo-container">
                 <img src="Logo azor.png" alt="Logo Grupo Azor" class="logo">
-                <h1>CONTROL DE CALIDAD GRUPO AZOR MEXICO</h1>
             </div>
-        </header>
+            <h1>CONTROL DE CALIDAD GRUPO AZOR MEXICO</h1>
+        </div>
 
         <main class="main-content">
             <section class="left-panel">
@@ -263,6 +340,10 @@
         <footer class="footer">
             &copy; 2025 Grupo Azor México. Todos los derechos reservados.
         </footer>
+
+        <div id="auditor-container">
+            <img id="auditor-image" src="Auditor.jpg" alt="Personaje Auditor">
+        </div>
     </div>
 
     <script type="text/javascript">
