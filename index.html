@@ -17,8 +17,8 @@
         }
 
         .container {
-            width: 95%; /* Aumentar el ancho */
-            max-width: 1200px;
+            width: 90%;
+            max-width: 1400px;
             margin: 20px auto;
             background-color: white;
             border-radius: 12px;
@@ -28,18 +28,18 @@
         }
 
         .container:hover {
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
         }
 
         /* Encabezado */
         .header {
             background-color: #007bff;
             color: white;
-            padding: 10px 15px; /* Menos padding */
+            padding: 10px 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 2px solid #0056b3;
+            border-bottom: 3px solid #0056b3;
         }
 
         .logo-container {
@@ -48,8 +48,8 @@
         }
 
         .logo {
-            max-height: 40px; /* Menos altura */
-            margin-right: 10px; /* Menos margen */
+            max-height: 50px;
+            margin-right: 10px;
             opacity: 0.9;
             transition: opacity 0.3s ease-in-out;
         }
@@ -59,7 +59,7 @@
         }
 
         .header h1 {
-            font-size: 1.3em; /* Menos tamaño */
+            font-size: 1.8em;
             margin: 0;
             font-weight: 700;
             letter-spacing: 0.5px;
@@ -71,7 +71,7 @@
             padding: 20px;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            grid-gap: 15px; /* Menos espacio entre columnas */
+            grid-gap: 15px;
         }
 
         .left-panel {
@@ -80,12 +80,12 @@
 
         .left-panel h2 {
             margin-top: 0;
-            font-size: 1.5em; /* Menos tamaño */
+            font-size: 1.5em;
             color: #555;
             border-bottom: 2px solid #ddd;
-            padding-bottom: 8px; /* Menos padding */
+            padding-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 0.5px; /* Menos espaciado */
+            letter-spacing: 0.5px;
         }
 
         .right-panel {
@@ -93,37 +93,37 @@
             background-color: #f5f5f5;
             border: 1px solid #ddd;
             border-radius: 8px;
-            padding: 15px; /* Menos padding */
+            padding: 15px;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: flex; /* Flexbox para el contenido */
+            flex-direction: column; /* Columna */
+            justify-content: space-between; /* Espacio entre elementos */
+            align-items: stretch; /* Estirar elementos */
         }
 
         .right-panel h3 {
-            font-size: 1.2em; /* Menos tamaño */
+            font-size: 1.2em;
             color: #555;
             margin-top: 0;
-            margin-bottom: 10px; /* Menos margen */
+            margin-bottom: 10px;
         }
 
         .right-panel p {
-            font-size: 0.95em; /* Menos tamaño */
-            line-height: 1.4; /* Menos espaciado */
+            font-size: 0.95em;
+            line-height: 1.4;
             color: #666;
+            margin-bottom: 15px; /* Espacio antes de los botones */
         }
 
         /* Cámara y Resultados */
         #webcam-container {
             width: 100%;
-            max-width: 400px;
-            margin: 0 auto 15px; /* Menos margen */
-            border: 2px solid #007bff;
+            max-width: 450px;
+            margin: 0 auto 15px;
+            border: none; /* Sin borde */
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: border-color 0.3s ease-in-out;
-        }
-
-        #webcam-container:hover {
-            border-color: #0056b3;
         }
 
         video {
@@ -135,7 +135,7 @@
         .label-container {
             font-size: 20px;
             font-weight: bold;
-            margin-bottom: 8px; /* Menos margen */
+            margin-bottom: 8px;
             color: #007bff;
             animation: fadeIn 0.5s ease-in-out;
         }
@@ -148,7 +148,7 @@
         .error-message {
             color: red;
             font-size: 14px;
-            margin-top: 8px; /* Menos margen */
+            margin-top: 8px;
             animation: shake 0.5s;
         }
 
@@ -162,15 +162,15 @@
         .controls {
             display: flex;
             justify-content: center;
-            gap: 15px; /* Menos espacio entre botones */
-            margin-top: 20px; /* Menos margen */
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .button {
-            padding: 8px 16px; /* Menos padding */
+            padding: 8px 16px;
             border: none;
-            border-radius: 8px;
-            font-size: 14px; /* Menos tamaño */
+            border-radius: 4px;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.25s ease-in-out;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -210,10 +210,10 @@
         /* Barra de Progreso */
         #progress-bar-container {
             width: 100%;
-            height: 8px; /* Menos altura */
+            height: 8px;
             background-color: #f3f3f3;
-            margin-bottom: 15px; /* Menos margen */
-            border-radius: 4px; /* Menos radio */
+            margin-bottom: 15px;
+            border-radius: 4px;
             overflow: hidden;
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
         }
@@ -227,17 +227,17 @@
 
         /* Botones Pausar/Reanudar */
         #pause-button, #resume-button {
-            padding: 8px 16px; /* Menos padding */
+            padding: 8px 16px;
             border: none;
-            border-radius: 4px; /* Menos radio */
-            font-size: 14px; /* Menos tamaño */
+            border-radius: 4px;
+            font-size: 14px;
             cursor: pointer;
             transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Menos sombra */
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         #pause-button {
-            background-color: #ffc107; /* Amarillo */
+            background-color: #ffc107;
             color: black;
         }
 
@@ -246,7 +246,7 @@
         }
 
         #resume-button {
-            background-color: #4caf50; /* Verde */
+            background-color: #4caf50;
             color: white;
             display: none;
         }
@@ -260,11 +260,11 @@
             background-color: #343a40;
             color: white;
             text-align: center;
-            padding: 10px; /* Menos padding */
+            padding: 10px;
             font-size: 0.8em;
             border-top: 1px solid #555;
-            margin-top: 20px; /* Menos margen */
-            border-bottom-left-radius: 12px; /* Menos radio */
+            margin-top: 20px;
+            border-bottom-left-radius: 12px;
             border-bottom-right-radius: 12px;
         }
     </style>
@@ -343,4 +343,57 @@
                 resumeButton.addEventListener('click', resumeWebcam);
 
                 // Ocultar la barra de progreso después de la carga
-                document.getElementById('progress-bar-container
+                document.getElementById('progress-bar-container').style.display = 'none';
+
+            } catch (error) {
+                console.error("Error al cargar el modelo:", error);
+                let errorMessage = "Error al cargar el modelo. Asegúrate de que los archivos del modelo estén en la misma carpeta.";
+                if (error && error.message) {
+                    errorMessage += " Detalles: " + error.message;
+                }
+                errorContainer.innerText = errorMessage;
+            }
+        }
+
+        async function loop() {
+            if (webcamActive) {
+                webcam.update();
+                await predict();
+                window.requestAnimationFrame(loop);
+            } else {
+                window.requestAnimationFrame(loop);
+            }
+        }
+
+        async function predict() {
+            try {
+                const prediction = await model.predict(webcam.canvas);
+                let result = prediction[0].probability > prediction[1].probability ? prediction[0] : prediction[1];
+                labelContainer.innerHTML = `Resultado: <span style="color: ${result.className.includes('BLISTER CORRECTO') ? 'green' : 'red'}">${result.className.toUpperCase()}</span>`;
+            } catch (error) {
+                console.error("Error al hacer la predicción:", error);
+                errorContainer.innerText = "Error al hacer la predicción.";
+            }
+        }
+
+        function pauseWebcam() {
+            webcam.pause();
+            webcamActive = false;
+            pauseButton.style.display = 'none';
+            resumeButton.style.display = 'inline-block';
+        }
+
+        function resumeWebcam() {
+            webcam.play();
+            webcamActive = true;
+            resumeButton.style.display = 'none';
+            pauseButton.style.display = 'inline-block';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+        });
+    </script>
+</body>
+
+</html>
