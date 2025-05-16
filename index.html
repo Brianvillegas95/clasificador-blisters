@@ -1,47 +1,69 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <title>Control de Calidad - Grupo Azor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Plataforma de Inspección Visual - Grupo Azor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
     <style>
-        /* Estilos Globales */
-        body {
-            font-family: 'Roboto', sans-serif;
+        :root {
+            --azor-blue: #007bff; /* Azul institucional original */
+            --azor-blue-dark: #0056b3; /* Azul oscuro para acentos/hover */
+            --light-bg: #f0f0f0; /* Fondo general claro, como el original */
+            --surface-bg: #ffffff; /* Fondo de los paneles/tarjetas */
+            --text-primary: #333333; /* Texto principal oscuro */
+            --text-secondary: #555555; /* Texto secundario */
+            --border-color: #dddddd; /* Color de borde sutil */
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --neutral-accent-color: #6c757d; /* Gris para botones secundarios o acentos */
+
+            --border-radius: 8px; /* Bordes un poco menos redondeados para un look más clásico */
+            --font-main: 'Roboto', sans-serif;
+        }
+
+        /* Reset y Estilos Globales */
+        *, *::before, *::after {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
-            color: #333;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--light-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        .container {
+        .app-container {
             width: 95%;
-            max-width: 1400px;
+            max-width: 1500px; /* Un poco menos ancho para un look más contenido */
             margin: 20px auto;
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .container:hover {
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Sombra suave al contenedor principal */
+            border-radius: var(--border-radius);
+            overflow: hidden; /* Para que los bordes redondeados afecten al header/footer */
         }
 
         /* Encabezado */
-        .header {
-            background-color: #007bff;
+        .app-header {
+            background-color: var(--azor-blue);
             color: white;
-            padding: 10px 15px;
+            padding: 15px 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 3px solid #0056b3;
+            /* border-bottom: 3px solid var(--azor-blue-dark); Eliminado para un look más plano */
         }
 
         .logo-container {
@@ -50,338 +72,514 @@
         }
 
         .logo {
-            max-height: 50px;
-            margin-right: 10px;
-            opacity: 0.9;
-            transition: opacity 0.3s ease-in-out;
+            max-height: 50px; /* Tamaño original */
+            margin-right: 15px;
         }
 
-        .logo:hover {
-            opacity: 1;
-        }
-
-        .header h1 {
-            font-size: 1.8em;
+        .app-header h1 {
+            font-family: var(--font-main); /* Fuente estándar */
+            font-size: 1.6em; /* Un poco más pequeño */
             font-weight: 700;
-            margin: 0;
-            letter-spacing: 0.5px;
         }
 
         /* Contenido Principal */
-        .main-content {
-            padding: 20px;
+        .main-content-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto 1fr;
-            grid-gap: 15px;
-        }
-
-        .left-panel {
-            width: 100%;
-        }
-
-        .left-panel h2 {
-            font-size: 1.5rem;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-
-        .right-panel {
-            background-color: #f5f5f5;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
             padding: 20px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            background-color: var(--surface-bg); /* Fondo blanco para el contenido */
+            flex-grow: 1;
+        }
+
+        .vision-panel, .controls-panel {
+            background-color: var(--surface-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* Sombra muy sutil */
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-            align-items: stretch;
-            height: auto;
-            max-height: 450px;
-            overflow-y: auto;
         }
-
-        .right-panel h3 {
-            font-size: 1.25rem;
+        
+        .vision-panel h2, .controls-panel h3 {
+            font-family: var(--font-main);
+            color: var(--azor-blue);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--azor-blue);
+            font-size: 1.3em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+         .controls-panel h4 { /* Para el subtítulo "Instrucciones de Uso" */
+            font-size: 1em;
+            color: var(--text-secondary);
             margin-bottom: 10px;
-            margin-top: 0;
+            font-weight: 500;
         }
 
-        .right-panel ol {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 12px;
-            padding-left: 20px;
-        }
 
         #webcam-container {
             width: 100%;
-            max-width: 450px;
-            margin: 0 auto 15px;
-            border-radius: 8px;
+            aspect-ratio: 16 / 12;
+            margin-bottom: 15px;
+            border-radius: 6px; /* Bordes más sutiles */
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #000;
+            border: 2px solid var(--border-color);
             position: relative;
-            aspect-ratio: 4 / 3;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
-
-        video {
+        #webcam-container video {
             display: block;
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .label-container {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: #007bff;
-            margin-top: 10px;
-        }
-
-        .error-message {
-            color: red;
-            font-size: 0.9rem;
-            margin-top: 8px;
-            animation: shake 0.5s;
-        }
-
-        /* Controles */
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .button {
-            padding: 10px 20px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .primary {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .primary:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        .secondary {
-            background-color: #6c757d;
-            color: white;
-        }
-
-        .secondary:hover {
-            background-color: #545b62;
-            transform: translateY(-2px);
-        }
-
-        .warning {
-            background-color: #ffc107;
-            color: black;
-        }
-
-        .warning:hover {
-            background-color: #e0a800;
-            transform: translateY(-2px);
-        }
-
-        /* Barra de Progreso */
         #progress-bar-container {
             width: 100%;
-            height: 10px;
-            background-color: #eee;
-            border-radius: 6px;
+            height: 8px;
+            background-color: #e9ecef; /* Gris claro para la base de la barra */
+            border-radius: 4px;
             overflow: hidden;
-            margin: 10px 0;
+            margin: 15px 0;
+            display: block;
         }
-
         #progress-bar {
             height: 100%;
             width: 0;
-            background-color: #28a745;
+            background-color: var(--success-color); /* Verde original para progreso */
             transition: width 0.4s ease-in-out;
+            border-radius: 4px;
         }
 
-        .footer {
-            background-color: #343a40;
-            color: white;
+        .label-container {
+            font-size: 1.25rem; /* Tamaño original */
+            font-weight: bold;
+            color: var(--text-primary);
             text-align: center;
             padding: 12px;
-            font-size: 0.875rem;
-            border-top: 1px solid #555;
-            border-bottom-left-radius: 12px;
-            border-bottom-right-radius: 12px;
+            background-color: #f8f9fa; /* Fondo muy claro para el resultado */
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-top: 10px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .label-container span { /* Para el texto dinámico del resultado */
+            font-weight: bold;
         }
 
-        /* Estilos para el personaje */
-        #auditor-container {
-            max-width: 120px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease-in-out;
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 10px;
+            background-color: #f8d7da; /* Fondo rojo claro para errores */
+            border: 1px solid #f5c6cb;
+            border-radius: 6px;
+            margin-top: 10px;
+            /* Eliminada animación de pulso para un look más sobrio */
+        }
+
+        /* Panel de Controles */
+        .controls-panel ol {
+            font-size: 0.95rem; /* Un poco más pequeño para más sobriedad */
+            line-height: 1.7;
+            color: var(--text-secondary);
+            padding-left: 20px; /* Numeración estándar */
+            margin-bottom: 20px;
+            /* list-style: none; Vuelve a la numeración original */
+        }
+        .controls-panel ol li {
+            margin-bottom: 10px;
+            /* Eliminado ::before para usar numeración por defecto */
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 10px 20px; /* Padding original */
+            font-size: 1rem;
+            font-weight: 500; /* Un poco menos bold que el 600 original */
+            font-family: var(--font-main);
+            border: 1px solid transparent; /* Borde base */
+            border-radius: var(--border-radius);
             cursor: pointer;
-            margin-top: 20px; /* Espacio debajo de los botones */
-            margin-left: auto; /* Centrar horizontalmente */
-            margin-right: auto; /* Centrar horizontalmente */
-            display: block; /* Asegurar que se centre correctamente */
+            transition: all 0.2s ease-in-out; /* Transición original */
+            text-transform: none; /* Texto normal, no uppercase */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Sombra sutil original */
+        }
+        .button i {
+            font-size: 1.1em;
         }
 
-        #auditor-container:hover {
-            transform: scale(1.02);
+        .button.primary-action { /* Nueva clase para el botón de análisis */
+            background-color: var(--azor-blue);
+            color: white;
+            border-color: var(--azor-blue-dark);
+        }
+        .button.primary-action:hover {
+            background-color: var(--azor-blue-dark);
+            transform: translateY(-1px); /* Efecto hover más sutil */
+            box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+        }
+        .button.primary-action:disabled {
+            background-color: #a0c7e8;
+            border-color: #8cb5d6;
+            cursor: not-allowed;
         }
 
+        .button.secondary-action { /* Para el botón "Volver al Inicio" */
+            background-color: var(--neutral-accent-color);
+            color: white;
+            border-color: #5a6268;
+        }
+        .button.secondary-action:hover {
+            background-color: #5a6268;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+        }
+
+        /* Estilos para el Asistente IA */
+        #auditor-section {
+            margin-top: auto;
+            text-align: center;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        #auditor-image-container {
+            display: inline-block; /* Para centrar la imagen y el mensaje */
+            position: relative; /* Para la burbuja de mensaje */
+            margin-bottom: 10px;
+        }
         #auditor-image {
-            width: 100%;
+            max-width: 80px; /* Un poco más pequeño */
             height: auto;
-            display: block;
+            border-radius: 50%;
+            border: 3px solid var(--border-color); /* Borde neutro */
+            transition: border-color 0.3s ease;
+        }
+        /* Clases para cambiar el borde del auditor según el estado */
+        #auditor-image.status-ok { border-color: var(--success-color); }
+        #auditor-image.status-error { border-color: var(--error-color); }
+        #auditor-image.status-thinking { border-color: var(--azor-blue); }
+
+        #auditor-message-bubble {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            padding: 8px 12px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            border: 1px solid #ced4da;
+            max-width: 200px; /* Para que no sea muy ancha */
+            margin: 5px auto 0; /* Centrada debajo de la imagen */
+            min-height: 3em; /* Para evitar saltos de layout */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+         #auditor-title {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+         }
+
+
+        /* Pie de Página */
+        .app-footer {
+            background-color: #343a40; /* Footer oscuro original */
+            color: #f8f9fa; /* Texto claro en footer */
+            text-align: center;
+            padding: 15px;
+            font-size: 0.875rem; /* Tamaño original */
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-content-grid {
+                grid-template-columns: 1.8fr 1fr; /* Ajuste ligero */
+            }
+        }
+        @media (max-width: 992px) {
+            .main-content-grid {
+                grid-template-columns: 1fr; /* Apilar en pantallas medianas */
+            }
+            .app-header h1 {
+                font-size: 1.4em;
+            }
+            .vision-panel h2, .controls-panel h3 {
+                font-size: 1.2em;
+            }
+        }
+        @media (max-width: 768px) {
+            .app-header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 12px;
+            }
+            .app-header h1 {
+                font-size: 1.3em;
+                text-align: center;
+            }
+            .logo {
+                max-height: 45px;
+            }
+            .main-content-grid {
+                padding: 15px;
+                gap: 15px;
+            }
+            .vision-panel, .controls-panel {
+                padding: 15px;
+            }
+            .button {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            .label-container {
+                font-size: 1.1rem;
+            }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 </head>
-
 <body>
-    <div class="container">
-        <header class="header">
+    <div class="app-container">
+        <header class="app-header">
             <div class="logo-container">
                 <img src="Logo azor.png" alt="Logo Grupo Azor" class="logo">
-                <h1>CONTROL DE CALIDAD GRUPO AZOR MEXICO</h1>
+                <h1>Control de Calidad Grupo Azor</h1>
             </div>
-        </header>
+            </header>
 
-        <main class="main-content">
-            <section class="left-panel">
-                <h2>Clasificador de Blister</h2>
-                <div id="webcam-container"></div>
+        <main class="main-content-grid">
+            <section class="vision-panel">
+                <h2><i class="fas fa-eye"></i> Clasificador de Blister</h2>
+                <div id="webcam-container">
+                    </div>
                 <div id="progress-bar-container">
                     <div id="progress-bar"></div>
                 </div>
-                <div class="label-container" id="label-container">Cargando modelo...</div>
-                <div class="error-message" id="error-container"></div>
+                <div class="label-container" id="label-container">Iniciando sistema...</div>
+                <div class="error-message" id="error-container" style="display: none;"></div>
             </section>
 
-            <aside class="right-panel">
-                <h3>Instrucciones</h3>
-                <ol style="font-size: 1.1rem; line-height: 1.6; color: #666; padding-left: 20px; margin-top: 0; margin-bottom: 20px;">
-                    <li>Coloca el objeto a inspeccionar frente a la cámara.</li>
-                    <li>Presiona el botón Capturar Muestra.</li>
+            <aside class="controls-panel">
+                <h3><i class="fas fa-cogs"></i> Panel de Control</h3>
+                <h4>Instrucciones de Uso:</h4>
+                <ol>
+                    <li>Coloque el objeto a inspeccionar frente a la cámara.</li>
+                    <li>Presione "Analizar Muestra" para iniciar la inspección.</li>
                     <li>El sistema identificará cualquier defecto o atributo visual.</li>
                 </ol>
-                <div class="controls">
-                    <button class="button primary" onclick="window.location.href='https://web.azor.com.mx/';">Inicio</button>
-                    <button id="capture-button" class="button warning">Capturar Muestra</button>
+
+                <div class="action-buttons">
+                    <button id="capture-button" class="button primary-action" disabled>
+                        <i class="fas fa-camera-retro"></i> Cargar Modelo...
+                    </button>
+                    <button class="button secondary-action" onclick="window.location.href='https://web.azor.com.mx/';">
+                        <i class="fas fa-home"></i> Volver al Inicio
+                    </button>
                 </div>
 
-                <div id="auditor-container">
-                    <img id="auditor-image" src="Auditor.png" alt="Personaje Auditor">
+                <div id="auditor-section">
+                    <p id="auditor-title">Asistente de Calidad IA</p>
+                    <div id="auditor-image-container">
+                        <img id="auditor-image" src="Auditor.png" alt="Asistente de Calidad IA">
+                    </div>
+                    <div id="auditor-message-bubble">Preparando sistema...</div>
                 </div>
             </aside>
         </main>
 
-        <footer class="footer">
-            &copy; 2025 Grupo Azor México. Todos los derechos reservados.
+        <footer class="app-footer">
+            &copy; <span id="currentYear"></span> Grupo Azor México. Todos los derechos reservados.
         </footer>
     </div>
 
     <script type="text/javascript">
-        const URL = "./";
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        const URL = "./"; 
         let model, webcam, labelContainer, maxPredictions;
         const errorContainer = document.getElementById('error-container');
         const captureButton = document.getElementById('capture-button');
-        let webcamActive = true;
-        let progressBar = document.getElementById('progress-bar');
+        const progressBar = document.getElementById('progress-bar');
+        const progressBarContainer = document.getElementById('progress-bar-container');
+        const webcamContainer = document.getElementById('webcam-container');
+        
+        const auditorImage = document.getElementById('auditor-image');
+        const auditorMessageBubble = document.getElementById('auditor-message-bubble');
+
+        let isWebcamActive = false;
+        let isAnalyzing = false; // Renombrado de isCapturing para mayor claridad
+
+        function updateAuditor(status, message) {
+            auditorMessageBubble.textContent = message;
+            auditorImage.className = ''; // Reset class
+            if (status === 'ok') {
+                auditorImage.classList.add('status-ok');
+            } else if (status === 'error') {
+                auditorImage.classList.add('status-error');
+            } else if (status === 'thinking' || status === 'loading') {
+                auditorImage.classList.add('status-thinking');
+            }
+        }
 
         async function init() {
+            labelContainer = document.getElementById("label-container");
+            updateAuditor('loading', 'Cargando modelo de IA...');
+            labelContainer.innerHTML = "Cargando modelo de IA...";
+            progressBarContainer.style.display = 'block';
+            captureButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cargando Modelo...';
+
+
             const modelURL = URL + "model.json";
             const metadataURL = URL + "metadata.json";
 
             try {
                 model = await tmImage.load(modelURL, metadataURL, (loaded, total) => {
-                    let progress = (loaded / total) * 100;
-                    progressBar.style.width = progress + '%';
+                    if (total) {
+                        let progress = (loaded / total) * 100;
+                        progressBar.style.width = progress + '%';
+                    }
                 });
                 maxPredictions = model.getTotalClasses();
 
                 const flip = true;
-                webcam = new tmImage.Webcam(300, 300, flip);
-                await webcam.setup();
-                await webcam.play();
-                window.requestAnimationFrame(loop);
-
-                document.getElementById("webcam-container").appendChild(webcam.canvas);
-                labelContainer = document.getElementById("label-container");
-
-                captureButton.addEventListener('click', toggleCapture);
-
-                // Ocultar la barra de progreso después de la carga
-                document.getElementById('progress-bar-container').style.display = 'none';
-
-            } catch (error) {
-                console.error("Error al cargar el modelo:", error);
-                let errorMessage = "Error al cargar el modelo. Asegúrate de que los archivos del modelo estén en la misma carpeta.";
-                if (error && error.message) {
-                    errorMessage += " Detalles: " + error.message;
+                // Ajustar tamaño de webcam si es necesario, basado en el contenedor.
+                // Para este ejemplo se usa un tamaño fijo, pero podría ser dinámico.
+                webcam = new tmImage.Webcam(300, 300, flip); // Tamaño original del script
+                await webcam.setup({ facingMode: "environment" }); 
+                
+                webcamContainer.innerHTML = ''; 
+                webcamContainer.appendChild(webcam.canvas);
+                // Redimensionar el canvas al contenedor si es necesario (CSS puede manejarlo con object-fit en video)
+                const canvas = webcamContainer.getElementsByTagName('canvas')[0];
+                if(canvas){
+                    canvas.style.width = "100%";
+                    canvas.style.height = "100%";
+                    canvas.style.objectFit = "cover";
                 }
-                errorContainer.innerText = errorMessage;
+                
+                await webcam.play();
+                isWebcamActive = true;
+                
+                labelContainer.innerHTML = "Sistema listo. Presione 'Analizar Muestra'.";
+                progressBarContainer.style.display = 'none';
+                updateAuditor('idle', '¡Sistema listo! Coloque el blister y analice.');
+                captureButton.disabled = false;
+                captureButton.innerHTML = '<i class="fas fa-camera-retro"></i> Analizar Muestra';
+                
+            } catch (error) {
+                console.error("Error al inicializar el sistema:", error);
+                let errorMessageText = "Error al cargar el modelo. ";
+                if (!navigator.onLine) {
+                    errorMessageText += "Verifique su conexión a internet. ";
+                }
+                if (error.message.includes("fetch")) {
+                     errorMessageText += "No se pudieron cargar los archivos del modelo. Verifique que 'model.json' y 'metadata.json' estén en la ubicación correcta. ";
+                } else if (error.message.includes("getUserMedia")) {
+                     errorMessageText += "No se pudo acceder a la cámara. Verifique los permisos. ";
+                } else {
+                    errorMessageText += "Detalles: " + error.message;
+                }
+                
+                errorContainer.innerText = errorMessageText;
+                errorContainer.style.display = 'block';
+                labelContainer.innerHTML = "Error en la inicialización";
+                labelContainer.style.color = 'var(--error-color)';
+                progressBarContainer.style.display = 'none';
+                captureButton.disabled = true;
+                captureButton.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error al Cargar';
+                updateAuditor('error', 'Error al iniciar. Revise la consola para detalles.');
             }
         }
 
         async function loop() {
-            if (webcamActive) {
-                webcam.update();
-                await predict();
-                window.requestAnimationFrame(loop);
-            } else {
-                window.requestAnimationFrame(loop);
-            }
+            if (!isWebcamActive || !isAnalyzing) return; 
+            
+            webcam.update(); 
+            await predict();
+            window.requestAnimationFrame(loop);
         }
 
         async function predict() {
+            if (!model || !webcam || !webcam.canvas) {
+                console.warn("Predicción omitida: modelo o webcam no disponibles.");
+                return;
+            }
             try {
                 const prediction = await model.predict(webcam.canvas);
-                let result = prediction[0].probability > prediction[1].probability ? prediction[0] : prediction[1];
-                labelContainer.innerHTML = `Resultado: <span style="color: ${result.className.includes('BLISTER CORRECTO') ? 'green' : 'red'}">${result.className.toUpperCase()}</span>`;
+                let bestPrediction = prediction.reduce((max, p) => p.probability > max.probability ? p : max, prediction[0]);
+
+                if (bestPrediction) {
+                    const resultText = `${bestPrediction.className.toUpperCase()}`;
+                    const confidence = `(${(bestPrediction.probability * 100).toFixed(1)}%)`;
+                    const isCorrect = bestPrediction.className.toLowerCase().includes('correcto'); // Asumiendo que 'correcto' está en el nombre de la clase
+                    const color = isCorrect ? 'var(--success-color)' : 'var(--error-color)';
+                    
+                    labelContainer.innerHTML = `Resultado: <span style="color: ${color}">${resultText}</span> ${confidence}`;
+
+                    if(isCorrect) {
+                        updateAuditor('ok', '¡Blister aprobado! ' + confidence);
+                    } else {
+                        updateAuditor('error', '¡Defecto detectado! ' + confidence);
+                    }
+                } else {
+                    labelContainer.innerHTML = "No se pudo determinar el resultado.";
+                    updateAuditor('idle', 'No estoy seguro del resultado.');
+                }
             } catch (error) {
-                console.error("Error al hacer la predicción:", error);
-                errorContainer.innerText = "Error al hacer la predicción.";
+                console.error("Error durante la predicción:", error);
+                errorContainer.innerText = "Error al procesar la imagen: " + error.message;
+                errorContainer.style.display = 'block';
+                labelContainer.innerHTML = "Error en predicción";
+                updateAuditor('error', 'Problema al analizar la imagen.');
             }
         }
 
-        function toggleCapture() {
-            webcamActive = !webcamActive;
-            if (webcamActive) {
-                webcam.play();
-                captureButton.textContent = "Capturar Muestra";
+        function toggleAnalysisState() {
+            if (!isWebcamActive) {
+                 errorContainer.innerText = "El sistema de cámara no está activo. Intente recargar.";
+                 errorContainer.style.display = 'block';
+                 updateAuditor('error', 'Cámara no disponible.');
+                 return;
+            }
+
+            isAnalyzing = !isAnalyzing;
+            if (isAnalyzing) {
+                captureButton.innerHTML = '<i class="fas fa-stop-circle"></i> Detener Análisis';
+                // Podrías cambiar el color del botón si quieres, por ejemplo a un rojo de "detener"
+                // captureButton.classList.replace('primary-action', 'stop-action'); // Necesitarías definir .stop-action
+                errorContainer.style.display = 'none'; 
+                labelContainer.innerHTML = "Analizando...";
+                updateAuditor('thinking', 'Procesando imagen...');
+                if (!webcam.playing) webcam.play(); // Asegurar que la webcam esté reproduciendo
+                window.requestAnimationFrame(loop); 
             } else {
-                webcam.pause();
-                captureButton.textContent = "Nueva Captura";
+                captureButton.innerHTML = '<i class="fas fa-camera-retro"></i> Analizar Muestra';
+                // Restaurar clase si se cambió
+                // captureButton.classList.replace('stop-action', 'primary-action');
+                updateAuditor('idle', 'Análisis detenido. Listo para una nueva muestra.');
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            init();
-        });
+        captureButton.addEventListener('click', toggleAnalysisState);
+        document.addEventListener('DOMContentLoaded', init);
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 </body>
-
 </html>
