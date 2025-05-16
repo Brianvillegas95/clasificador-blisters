@@ -22,7 +22,7 @@
             max-width: 1400px;
             margin: 20px auto;
             background-color: white;
-            border-radius: 2xl;
+            border-radius: 12px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
             overflow: hidden;
             transition: all 0.3s ease-in-out;
@@ -83,7 +83,7 @@
         .right-panel {
             background-color: #f9f9f9;
             border: 1px solid #ddd;
-            border-radius: 2xl;
+            border-radius: 12px;
             padding: 20px;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
             display: flex;
@@ -106,9 +106,10 @@
             width: 100%;
             max-width: 450px;
             margin: 0 auto 15px;
-            border-radius: 2xl;
+            border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative; /* Para la superposición de elementos */
         }
 
         video {
@@ -201,8 +202,8 @@
             padding: 12px;
             font-size: 0.875rem;
             border-top: 1px solid #555;
-            border-bottom-left-radius: 2xl;
-            border-bottom-right-radius: 2xl;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
         }
     </style>
 </head>
@@ -243,6 +244,92 @@
             &copy; 2025 Grupo Azor México. Todos los derechos reservados.
         </footer>
     </div>
+
+    <script type="text/javascript">
+        const URL = "./";
+        let model, webcam, labelContainer, maxPredictions;
+        const errorContainer = document.getElementById('error-container');
+        const pauseButton = document.getElementById('pause-button');
+        const resumeButton = document.getElementById('resume-button');
+        let webcamActive = true;
+        let progressBar = document.getElementById('progress-bar');
+
+        async function init() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+
+            try {
+                model = await tmImage.load(modelURL, metadataURL, (loaded, total) => {
+                    let progress = (loaded / total) * 100;
+                    progressBar.style.width = progress + '%';
+                });
+                maxPredictions = model.getTotalClasses();
+
+                const flip = true;
+                webcam = new tmImage.Webcam(300, 300, flip);
+                await webcam.setup();
+                await webcam.play();
+                window.requestAnimationFrame(loop);
+
+                document.getElementById("webcam-container").appendChild(webcam.canvas);
+                labelContainer = document.getElementById("label-container");
+
+                pauseButton.addEventListener('click', pauseWebcam);
+                resumeButton.addEventListener('click', resumeWebcam);
+
+                // Ocultar la barra de progreso después de la carga
+                document.getElementById('progress-bar-container').style.display = 'none';
+
+            } catch (error) {
+                console.error("Error al cargar el modelo:", error);
+                let errorMessage = "Error al cargar el modelo. Asegúrate de que los archivos del modelo estén en la misma carpeta.";
+                if (error && error.message) {
+                    errorMessage += " Detalles: " + error.message;
+                }
+                errorContainer.innerText = errorMessage;
+            }
+        }
+
+        async function loop() {
+            if (webcamActive) {
+                webcam.update();
+                await predict();
+                window.requestAnimationFrame(loop);
+            } else {
+                window.requestAnimationFrame(loop);
+            }
+        }
+
+        async function predict() {
+            try {
+                const prediction = await model.predict(webcam.canvas);
+                let result = prediction[0].probability > prediction[1].probability ? prediction[0] : prediction[1];
+                labelContainer.innerHTML = `Resultado: <span style="color: ${result.className.includes('BLISTER CORRECTO') ? 'green' : 'red'}">${result.className.toUpperCase()}</span>`;
+            } catch (error) {
+                console.error("Error al hacer la predicción:", error);
+                errorContainer.innerText = "Error al hacer la predicción.";
+            }
+        }
+
+        function pauseWebcam() {
+            webcam.pause();
+            webcamActive = false;
+            pauseButton.style.display = 'none';
+            resumeButton.style.display = 'inline-block';
+        }
+
+        function resumeWebcam() {
+            webcam.play();
+            webcamActive = true;
+            resumeButton.style.display = 'none';
+            pauseButton.style.display = 'inline-block';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 </body>
 
 </html>
